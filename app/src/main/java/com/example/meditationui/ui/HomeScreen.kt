@@ -5,9 +5,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -29,10 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.meditationui.BottomMenuContent
-import com.example.meditationui.Feature
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.meditationui.*
 import com.example.meditationui.R
-import com.example.meditationui.standardQuadFromTo
 import com.example.meditationui.ui.theme.*
 
 @Preview
@@ -45,7 +45,7 @@ fun HomeScreen() {
     ) {
         Column {
             GreetingSection()
-            ChipSection(chips = listOf("Sweet Sleep", "Insomnia", "Depression"))
+            ChipSection(chips = listOf("Sweet Sleep", "Insomnia", "Depression", "Joy"))
             CurrentMediation()
             FeatureSection(
                 feature = listOf(
@@ -59,23 +59,30 @@ fun HomeScreen() {
                     Feature(
                         title = "Tips for sleeping",
                         R.drawable.ic_headphones,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
+                        LightGreen1,
+                        LightGreen2,
+                        LightGreen3
                     ),
                     Feature(
                         title = "Night Island",
                         R.drawable.ic_headphones,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
+                        OrangeYellow1,
+                        OrangeYellow2,
+                        OrangeYellow3
                     ),
                     Feature(
                         title = "Calming sounds",
                         R.drawable.ic_headphones,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
+                        Beige1,
+                        Beige2,
+                        Beige3
+                    ),
+                    Feature(
+                        title = "Sleeping Mediation",
+                        R.drawable.ic_headphones,
+                        LightGreen1,
+                        LightGreen2,
+                        LightGreen3
                     ),
                     Feature(
                         title = "Sleeping Mediation",
@@ -84,14 +91,9 @@ fun HomeScreen() {
                         BlueViolet2,
                         BlueViolet3
                     ),
-                    Feature(
-                        title = "Sleeping Mediation",
-                        R.drawable.ic_headphones,
-                        BlueViolet1,
-                        BlueViolet2,
-                        BlueViolet3
-                    ),
-                )
+                ),
+                modifier = Modifier,
+                title = "Featured"
             )
         }
         BottomMenu(
@@ -138,7 +140,6 @@ fun BottomMenu(
                 selectedItemIndex = index
             }
         }
-
     }
 }
 
@@ -194,8 +195,7 @@ fun GreetingSection(
             Text(
                 text = "Good Morning, $name",
                 style = MaterialTheme.typography.h5,
-                color = Color.White
-
+                color = Color.White,
             )
             Text(
                 text = "We wish you have a good day!",
@@ -208,7 +208,7 @@ fun GreetingSection(
             painter = painterResource(id = R.drawable.ic_search_24),
             contentDescription = "Search",
             tint = Color.White,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(35.dp)
         )
     }
 }
@@ -282,33 +282,38 @@ fun CurrentMediation(color: Color = LightRed) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FeatureSection(feature: List<Feature>) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+fun FeatureSection(feature: List<Feature>, title: String, modifier: Modifier) {
+    Column(
+        modifier = modifier
+            .height(300.dp)
+            .fillMaxWidth()
+    ) {
         Text(
-            text = "Features",
-            style = MaterialTheme.typography.h5,
-            modifier = Modifier.padding(10.dp),
-            color = Color.White
+            text = title,
+            style = MaterialTheme.typography.h4,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(10.dp, top = 30.dp, bottom = 20.dp),
+            color = Color.White,
         )
 
         LazyVerticalGrid(
-            cells = GridCells.Fixed(2),
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
             modifier = Modifier.fillMaxHeight()
+
         ) {
             items(feature.size) {
-                FeatureItem(feature = feature[it])
+                FeatureItem(feature = feature[it], navController = rememberNavController())
             }
         }
-
     }
 }
 
 @Composable
 fun FeatureItem(
-    feature: Feature
+    feature: Feature,
+    navController: NavController
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -358,6 +363,7 @@ fun FeatureItem(
                 text = feature.title,
                 style = MaterialTheme.typography.h5,
                 lineHeight = 26.sp,
+                color = Color.White,
                 modifier = Modifier.align(Alignment.TopStart),
             )
 
@@ -373,7 +379,7 @@ fun FeatureItem(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .clickable {
-                        // handle the click
+                        navController.navigate(route = NavigationScreens.Featured.route)
                     }
                     .align(Alignment.BottomEnd)
                     .clip(RoundedCornerShape(10.dp))
