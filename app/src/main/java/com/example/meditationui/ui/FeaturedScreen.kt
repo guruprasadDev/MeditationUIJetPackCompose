@@ -3,7 +3,9 @@ package com.example.meditationui.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -27,28 +29,49 @@ import com.example.meditationui.R
 import com.example.meditationui.standardQuadFromTo
 import com.example.meditationui.ui.theme.*
 
-
-@Preview
 @Composable
 fun SleepMediationUi(modifier: Modifier = Modifier) {
-    Column(
-        modifier = Modifier
+    LazyColumn(
+        modifier = modifier
             .background(DeepBlue)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+//            .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            modifier = Modifier
-                .padding(top = 30.dp, start = 5.dp, end = 5.dp)
-                .weight(1f, fill = false)
-        ) {
+        item {
             OnClickBackAndFeaturedIcon(
                 backIcon = R.drawable.ic_arrow_back,
                 fav = R.drawable.ic_star
             )
             PracticeMediation()
+        }
+
+        item {
             FeatureSections(
                 feature = listOf(
+                    Feature(
+                        "",
+                        R.drawable.ic_headphone,
+                        BlueViolet1, BlueViolet2, BlueViolet3
+                    ),
+                    Feature(
+                        "",
+                        R.drawable.ic_headphone,
+                        BlueViolet1, BlueViolet2, BlueViolet3
+                    ),
+                    Feature(
+                        "",
+                        R.drawable.ic_headphone,
+                        BlueViolet1, BlueViolet2, BlueViolet3
+                    ),
+                    Feature(
+                        "",
+                        R.drawable.ic_headphone,
+                        BlueViolet1, BlueViolet2, BlueViolet3
+                    ),
+                    Feature(
+                        "",
+                        R.drawable.ic_headphone,
+                        BlueViolet1, BlueViolet2, BlueViolet3
+                    ),
                     Feature(
                         "",
                         R.drawable.ic_headphone,
@@ -56,10 +79,30 @@ fun SleepMediationUi(modifier: Modifier = Modifier) {
                     )
                 )
             )
+        }
+
+        item {
             WatchTime()
+        }
+
+        item {
             Description()
+        }
+
+        item {
             SavedStarsAndLeste()
-            DividerLine()
+        }
+
+        item {
+            Divider(
+                modifier = Modifier
+                    .padding(16.dp, top = 30.dp, bottom = 10.dp, end = 5.dp),
+                color = Color(0XFF172b61),
+                thickness = 2.dp
+            )
+        }
+
+        item {
             FeatureSection(
                 modifier = modifier.height(300.dp),
                 feature = listOf(
@@ -105,12 +148,18 @@ fun SleepMediationUi(modifier: Modifier = Modifier) {
                         BlueViolet2,
                         BlueViolet3
                     ),
-                ), title = "Related"
+                ),
+                title = "Related"
             )
         }
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun SleepMediationUiPreview() {
+    SleepMediationUi()
+}
 
 @Composable
 fun OnClickBackAndFeaturedIcon(
@@ -142,7 +191,10 @@ fun OnClickBackAndFeaturedIcon(
 
 @Composable
 fun PracticeMediation() {
-    Column(modifier = Modifier.padding(all = 16.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(all = 16.dp)
+    ) {
         Text(
             text = "Sleep Mediation",
             style = MaterialTheme.typography.h4,
@@ -161,17 +213,16 @@ fun PracticeMediation() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FeatureSections(feature: List<Feature>) {
-    Column(
+    LazyHorizontalGrid(
+        rows = GridCells.Fixed(1),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .height(250.dp)
+            .padding(16.dp),
+        contentPadding = PaddingValues(end = 8.dp)
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(1),
-        ) {
-            items(feature.size) {
-                FeatureItems(feature = feature[it])
-            }
+        items(feature.size) {
+            FeatureItems(feature = feature[it])
         }
     }
 }
@@ -185,7 +236,7 @@ fun FeatureItems(
             .aspectRatio(1.5f)
             .clip(RoundedCornerShape(10.dp))
             .background(feature.darkColor)
-
+            .padding(4.dp)
     ) {
         val width = constraints.maxWidth
         val height = constraints.maxHeight
@@ -268,7 +319,10 @@ fun WatchTime() {
 
 @Composable
 fun Description() {
-    Column(modifier = Modifier.padding(start = 16.dp, top = 16.dp)) {
+    Box(
+        modifier = Modifier
+            .padding(start = 16.dp, top = 16.dp)
+    ) {
         Text(
             "Ease the mind into a restful nights sleep\nwith these deep, amblent tones.",
             Modifier.padding(1.dp),
@@ -311,13 +365,6 @@ fun SavedStarsAndLeste() {
             color = Color.LightGray,
             17.sp
         )
-    }
-}
-
-@Composable
-fun DividerLine() {
-    Row(modifier = Modifier.padding(16.dp, top = 30.dp, bottom = 10.dp, end = 5.dp)) {
-        Divider(color = Color(0XFF172b61), thickness = 2.dp)
     }
 }
 

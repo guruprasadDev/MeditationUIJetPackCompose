@@ -283,11 +283,14 @@ fun CurrentMediation(color: Color = LightRed) {
 }
 
 @Composable
-fun FeatureSection(feature: List<Feature>, title: String, modifier: Modifier) {
+fun FeatureSection(
+    feature: List<Feature>,
+    title: String,
+    modifier: Modifier
+) {
+    // Todo : Provide a static height here
     Column(
         modifier = modifier
-            .height(300.dp)
-            .fillMaxWidth()
     ) {
         Text(
             text = title,
@@ -300,7 +303,8 @@ fun FeatureSection(feature: List<Feature>, title: String, modifier: Modifier) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier
+                .height(400.dp)
 
         ) {
             items(feature.size) {
